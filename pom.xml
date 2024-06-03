@@ -7,18 +7,16 @@
     <parent>
         <groupId>org.sonatype.nexus.plugins</groupId>
         <artifactId>nexus-plugins</artifactId>
-        <version>3.38.0-01</version>
+        <version>3.68.1-02</version>
     </parent>
 
     <groupId>fr.edf.nexus.plugins</groupId>
     <artifactId>nexus-repository-dart</artifactId>
     <packaging>bundle</packaging>
-    <version>1.1.0</version>
-
-    <inceptionYear>2021</inceptionYear>
+    <version>2.0.0-SNAPSHOT</version>
 
     <properties>
-        <nxrm-version>3.38.0-01</nxrm-version>
+        <nxrm-version>3.68.1-02</nxrm-version>
     </properties>
 
     <licenses>

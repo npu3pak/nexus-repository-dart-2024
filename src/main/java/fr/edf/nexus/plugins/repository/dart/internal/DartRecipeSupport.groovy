@@ -14,6 +14,7 @@ package fr.edf.nexus.plugins.repository.dart.internal
 
 import static org.sonatype.nexus.repository.http.HttpMethods.GET
 import static org.sonatype.nexus.repository.http.HttpMethods.HEAD
+import static org.sonatype.nexus.repository.http.HttpMethods.POST
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -151,8 +152,70 @@ abstract class DartRecipeSupport extends RecipeSupport {
     static Builder archiveMatcher() {
         new Builder().matcher(
                 LogicMatchers.and(
-                new ActionMatcher(HttpMethods.GET),
-                new TokenMatcher('/packages/{package:.+}/versions/{version:.+}.tar.gz')
+                new ActionMatcher(GET, HEAD),
+                new TokenMatcher('/api/archives/{package:.+}.tar.gz')
                 ))
     }
+
+    /**
+     * Route matcher ask an upload of a Dart package 
+     * on a hosted repository with Dart or Flutter commandline
+     * 
+     * @see <a href="https://github.com/dart-lang/pub/blob/master/doc/repository-spec-v2.md#publishing-packages">Hosted Pub Repository Specification Version 2</a>
+     * 
+     * @return Route {@link Builder} of this matcher
+     */
+    static Builder publishMatcher() {
+        new Builder().matcher(
+                LogicMatchers.and(
+                new ActionMatcher(GET, HEAD),
+                new LiteralMatcher('/api/packages/versions/new')
+                ))
+    }
+
+    /**
+     * Route matcher to upload a Dart package on a hosted repository
+     * with Dart or Flutter commandline
+     *
+     * @see <a href="https://github.com/dart-lang/pub/blob/master/doc/repository-spec-v2.md#publishing-packages">Hosted Pub Repository Specification Version 2</a>
+     *
+     * @return Route {@link Builder} of this matcher
+     */
+    static Builder multipartUploadMatcher() {
+        new Builder().matcher(
+                LogicMatchers.and(
+                new ActionMatcher(POST),
+                new TokenMatcher('/api/{id:.+}/multipart')
+                ))
+    }
+
+    /**
+     * Route matcher to finalize an upload of a Dart package on a hosted repository
+     * with Dart or Flutter commandline
+     *
+     * @see <a href="https://github.com/dart-lang/pub/blob/master/doc/repository-spec-v2.md#publishing-packages">Hosted Pub Repository Specification Version 2</a>
+     *
+     * @return Route {@link Builder} of this matcher
+     */
+    static Builder finalizeUploadMatcher() {
+        new Builder().matcher(
+                LogicMatchers.and(
+                        new ActionMatcher(GET, HEAD),
+                        new TokenMatcher('/api/{package:.+}/versions/{version:.+}/finalize')
+                        ))
+    }
+
+    /**
+     * Route matcher for flutter infra api
+     *
+     * @return Route {@link Builder} of this matcher
+     */
+    // TODO : for flutter upload or other flutter tools
+    //    static Builder flutterInfraMatcher() {
+    //        new Builder().matcher(
+    //                LogicMatchers.and(
+    //                        new ActionMatcher(HttpMethods.GET),
+    //                        new TokenMatcher('/flutter_infra_release/flutter/f0826da7ef2d301eb8f4ead91aaf026aa2b52881/sky_engine.zip')
+    //                        ))
+    //    }
 }

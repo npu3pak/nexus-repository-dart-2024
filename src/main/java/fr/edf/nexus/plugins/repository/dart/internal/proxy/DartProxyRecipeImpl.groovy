@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package fr.edf.nexus.plugins.repository.dart.internal
+package fr.edf.nexus.plugins.repository.dart.internal.proxy
 
 import javax.annotation.Nonnull
 import javax.inject.Inject
@@ -32,14 +32,18 @@ import org.sonatype.nexus.repository.view.ConfigurableViewFacet
 import org.sonatype.nexus.repository.view.Router
 import org.sonatype.nexus.repository.view.ViewFacet
 
+import fr.edf.nexus.plugins.repository.dart.internal.AssetKind
+import fr.edf.nexus.plugins.repository.dart.internal.DartFormat
+import fr.edf.nexus.plugins.repository.dart.internal.DartPackagesHandler
+import fr.edf.nexus.plugins.repository.dart.internal.DartRecipeSupport
+import fr.edf.nexus.plugins.repository.dart.internal.recipe.DartProxyRecipe
+
 /**
  * Recipe for creating a Dart proxy repository.
  */
 @Named(DartProxyRecipe.NAME)
 @Singleton
-class DartProxyRecipe extends DartRecipeSupport {
-
-    public static final String NAME = 'dart-proxy'
+class DartProxyRecipeImpl extends DartRecipeSupport implements DartProxyRecipe {
 
     @Inject
     Provider<DartProxyFacetImpl> proxyFacet
@@ -63,7 +67,7 @@ class DartProxyRecipe extends DartRecipeSupport {
     DartPackagesHandler dartPackagesHandler
 
     @Inject
-    DartProxyRecipe(@Named(ProxyType.NAME) final Type type, @Named(DartFormat.NAME) final Format format) {
+    DartProxyRecipeImpl(@Named(ProxyType.NAME) final Type type, @Named(DartFormat.NAME) final Format format) {
         super(type, format)
     }
 
